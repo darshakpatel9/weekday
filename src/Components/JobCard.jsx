@@ -7,7 +7,7 @@ import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import CardHeader from "@mui/material/CardHeader";
 import Link from "@mui/material/Link";
-
+import Avatar from "@mui/material/Avatar";
 const maxChars = 200;
 export default function JobCard({
   jobDetailsFromCompany,
@@ -28,11 +28,11 @@ export default function JobCard({
   };
 
   return (
-    <Card sx={{ width: 275, height: 600 }}>
+    <Card sx={{ width: 275, height: 450 }}>
       <CardHeader
         title={companyName}
         subheader={jobRole}
-        avatar={<img src={logoUrl} alt={companyName} />}
+        avatar={<Avatar src={logoUrl} alt={companyName} />}
       />
       <CardContent>
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
@@ -43,21 +43,22 @@ export default function JobCard({
           About Company
         </Typography>
 
-        <Typography variant="body2" sx={{ overflow: "auto", height: 200 }}>
+        <Typography variant="body2" sx={{ overflow: "auto", height: 150 }}>
           <div>
             {jobDetailsFromCompany.length <= maxChars || isExpanded ? (
-              <p>
+              <>
                 {jobDetailsFromCompany}
                 <br />
+
                 {jobDetailsFromCompany.length > maxChars && (
                   <Link onClick={toggleExpansion}>
                     {isExpanded ? "Show Less" : "Show More"}
                   </Link>
                 )}
-              </p>
+              </>
             ) : (
               <div>
-                <p>{`${jobDetailsFromCompany.slice(0, maxChars)}...`}</p>
+                {`${jobDetailsFromCompany.slice(0, maxChars)}...`}
                 <Link onClick={toggleExpansion}>
                   {isExpanded ? "Show Less" : "Show More"}
                 </Link>

@@ -63,7 +63,7 @@ function App() {
         spacing={2}
       >
         {jobList.map((job, index) => (
-          <Grid item key={index}>
+          <Grid item xs={12} lg={3} md={4} xl={2} key={index}>
             <JobCard
               jobDetailsFromCompany={job.jobDetailsFromCompany}
               maxJdSalary={job.maxJdSalary}
