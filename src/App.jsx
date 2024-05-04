@@ -1,25 +1,59 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
+import { useEffect, useState } from "react";
 import "./App.css";
 import JobCard from "./Components/JobCard";
-
+import Grid from "@mui/material/Grid";
 function App() {
+  const [jobList, setJobList] = useState([]);
+  useEffect(() => {
+    getJobList();
+  });
+  const getJobList = async () => {
+    const myHeaders = new Headers();
+    myHeaders.append("Content-Type", "application/json");
+
+    const body = JSON.stringify({
+      limit: 100,
+      offset: 0,
+    });
+
+    const requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body,
+    };
+    const response = await fetch(
+      "https://api.weekday.technology/adhoc/getSampleJdJSON",
+      requestOptions
+    );
+    const jobs = await response.json();
+    setJobList(jobs.jdList);
+  };
   return (
-    <>
-      <JobCard
-        jobDetailsFromCompany="This is a sample job and you must have displayed it to understand that its not just some random lorem ipsum text but something which was manually written. Oh well, if random text is what you were looking for then here it is: Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages and now in this assignment."
-        maxJdSalary={28}
-        minJdSalary={26}
-        salaryCurrencyCode="USD"
-        location="remote"
-        minExp={2}
-        maxExp={11}
-        jobRole="android"
-        companyName="Sony"
-        logoUrl="https://logo.clearbit.com/sony.com"
-      />
-    </>
+    <div className="job-list">
+      <Grid
+        sx={{ flexGrow: 1, flexWrap: "wrap" }}
+        alignItems="flex-start"
+        container
+        spacing={2}
+      >
+        {jobList.map((job) => (
+          <Grid item>
+            <JobCard
+              jobDetailsFromCompany={job.jobDetailsFromCompany}
+              maxJdSalary={job.maxJdSalary}
+              minJdSalary={job.minJdSalary}
+              salaryCurrencyCode={job.salaryCurrencyCode}
+              location={job.location}
+              minExp={job.minExp}
+              maxExp={job.maxExp}
+              jobRole={job.jobRole}
+              companyName={job.companyName}
+              logoUrl={job.logoUrl}
+            />
+          </Grid>
+        ))}
+      </Grid>
+    </div>
   );
 }
 

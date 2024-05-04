@@ -6,8 +6,9 @@ import CardContent from "@mui/material/CardContent";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
 import CardHeader from "@mui/material/CardHeader";
+import Link from "@mui/material/Link";
 
-const maxChars = 100;
+const maxChars = 200;
 export default function JobCard({
   jobDetailsFromCompany,
   maxJdSalary,
@@ -27,7 +28,7 @@ export default function JobCard({
   };
 
   return (
-    <Card sx={{ minWidth: 275 }}>
+    <Card sx={{ width: 275, height: 600 }}>
       <CardHeader
         title={companyName}
         subheader={jobRole}
@@ -42,18 +43,27 @@ export default function JobCard({
           About Company
         </Typography>
 
-        <Typography variant="body2">
-          {jobDetailsFromCompany}
-          {jobDetailsFromCompany.length <= maxChars || isExpanded ? (
-            <p>{jobDetailsFromCompany}</p>
-          ) : (
-            <div>
-              <p>{`${jobDetailsFromCompany.slice(0, maxChars)}...`}</p>
-              <button onClick={toggleExpansion}>
-                {isExpanded ? "Show Less" : "Show More"}
-              </button>
-            </div>
-          )}
+        <Typography variant="body2" sx={{ overflow: "auto", height: 200 }}>
+          <div>
+            {jobDetailsFromCompany.length <= maxChars || isExpanded ? (
+              <p>
+                {jobDetailsFromCompany}
+                <br />
+                {jobDetailsFromCompany.length > maxChars && (
+                  <Link onClick={toggleExpansion}>
+                    {isExpanded ? "Show Less" : "Show More"}
+                  </Link>
+                )}
+              </p>
+            ) : (
+              <div>
+                <p>{`${jobDetailsFromCompany.slice(0, maxChars)}...`}</p>
+                <Link onClick={toggleExpansion}>
+                  {isExpanded ? "Show Less" : "Show More"}
+                </Link>
+              </div>
+            )}
+          </div>
         </Typography>
         <Typography sx={{ fontSize: 14 }} color="text.primary" gutterBottom>
           Minimum Exeperince
@@ -62,7 +72,7 @@ export default function JobCard({
           {minExp} years
         </Typography>
       </CardContent>
-      <CardActions>
+      <CardActions sx={{ alignItems: "center", justifyContent: "center" }}>
         <Button variant="contained">Easy Apply</Button>
       </CardActions>
     </Card>
