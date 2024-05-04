@@ -1,19 +1,43 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import "./App.css";
 import JobCard from "./Components/JobCard";
 import Grid from "@mui/material/Grid";
+
+const limit = 10;
+
 function App() {
   const [jobList, setJobList] = useState([]);
+  const [page, setPage] = useState(0);
+  const containerRef = useRef(null);
+
   useEffect(() => {
-    getJobList();
-  });
-  const getJobList = async () => {
+    getJobList(page);
+    window.addEventListener("scroll", handleScroll);
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+    };
+  }, [page]);
+
+  const handleScroll = () => {
+    console.log("innerHigr : " + window.innerHeight);
+    console.log("scrollTop : " + document.documentElement.scrollTop);
+    console.log("offset : " + document.documentElement.offsetHeight);
+    if (
+      window.innerHeight + document.documentElement.scrollTop !=
+      document.documentElement.offsetHeight
+    ) {
+      return;
+    }
+    setPage((prevPage) => prevPage + 1);
+  };
+
+  const getJobList = async (page) => {
     const myHeaders = new Headers();
     myHeaders.append("Content-Type", "application/json");
 
     const body = JSON.stringify({
-      limit: 100,
-      offset: 0,
+      limit: limit,
+      offset: page * limit,
     });
 
     const requestOptions = {
@@ -21,23 +45,25 @@ function App() {
       headers: myHeaders,
       body,
     };
+
     const response = await fetch(
       "https://api.weekday.technology/adhoc/getSampleJdJSON",
       requestOptions
     );
     const jobs = await response.json();
-    setJobList(jobs.jdList);
+    setJobList((prevJobs) => [...prevJobs, ...jobs.jdList]);
   };
+
   return (
-    <div className="job-list">
+    <div className="job-list" ref={containerRef} style={{ overflowY: "auto" }}>
       <Grid
         sx={{ flexGrow: 1, flexWrap: "wrap" }}
         alignItems="flex-start"
         container
         spacing={2}
       >
-        {jobList.map((job) => (
-          <Grid item>
+        {jobList.map((job, index) => (
+          <Grid item key={index}>
             <JobCard
               jobDetailsFromCompany={job.jobDetailsFromCompany}
               maxJdSalary={job.maxJdSalary}
