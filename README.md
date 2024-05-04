@@ -1,5 +1,7 @@
 # Week Day assignment
 
-start using
+Steps to Run the App.
 
-npm run dev
+1. Clone the repository.
+2. run "npm install "
+3. start the app with "npm run dev"
