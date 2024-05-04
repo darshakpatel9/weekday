@@ -9,19 +9,20 @@ import CardHeader from "@mui/material/CardHeader";
 import Link from "@mui/material/Link";
 import Avatar from "@mui/material/Avatar";
 const maxChars = 200;
-export default function JobCard({
-  jobDetailsFromCompany,
-  maxJdSalary,
-  minJdSalary,
-  salaryCurrencyCode,
-  location,
-  maxExp,
-  minExp,
-  jobRole,
-  companyName,
-  logoUrl,
-}) {
-  const [isExpanded, setIsExpanded] = React.useState(false);
+export default function JobCard({ job }) {
+  const {
+    jobDetailsFromCompany,
+    maxJdSalary,
+    minJdSalary,
+    salaryCurrencyCode,
+    location,
+    maxExp,
+    minExp,
+    jobRole,
+    companyName,
+    logoUrl,
+  } = job; // JOB Details
+  const [isExpanded, setIsExpanded] = React.useState(false); // if About Section is Expanded
 
   const toggleExpansion = () => {
     setIsExpanded(!isExpanded);
@@ -31,20 +32,31 @@ export default function JobCard({
     <Card sx={{ width: 275, height: 450 }}>
       <CardHeader
         title={companyName}
-        subheader={jobRole}
+        subheader={
+          <>
+            <span className="jobRoleTitle">{jobRole}</span>
+            <br />
+            {location}
+          </>
+        }
         avatar={<Avatar src={logoUrl} alt={companyName} />}
       />
       <CardContent>
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-          Estimate Salary : {minJdSalary}K$ - {maxJdSalary}K$
+          {` Estimate Salary : ${minJdSalary ? minJdSalary + "K$ -" : ""}  ${
+            maxJdSalary ? maxJdSalary + "K$ " : ""
+          }`}
         </Typography>
 
-        <Typography variant="h5" component="div">
-          About Company
+        <Typography variant="h6" component="div">
+          About Company:
         </Typography>
 
         <Typography variant="body2" sx={{ overflow: "auto", height: 150 }}>
           <div>
+            {/* 
+              if is less than maxChars then show truncated else show full text
+            */}
             {jobDetailsFromCompany.length <= maxChars || isExpanded ? (
               <>
                 {jobDetailsFromCompany}
@@ -59,6 +71,7 @@ export default function JobCard({
             ) : (
               <div>
                 {`${jobDetailsFromCompany.slice(0, maxChars)}...`}
+                <br />
                 <Link onClick={toggleExpansion}>
                   {isExpanded ? "Show Less" : "Show More"}
                 </Link>
@@ -70,7 +83,7 @@ export default function JobCard({
           Minimum Exeperince
         </Typography>
         <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
-          {minExp} years
+          {minExp || 0} years
         </Typography>
       </CardContent>
       <CardActions sx={{ alignItems: "center", justifyContent: "center" }}>

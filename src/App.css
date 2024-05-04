@@ -1,0 +1,31 @@
+.loader {
+  font-weight: 800;
+  font-size: large;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.filterPanel {
+  display: flex;
+  margin: 10px;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  height: 100%;
+}
+
+.joblist {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  height: 100%;
+}
+
+.jobRoleTitle {
+  font-size: 14px;
+  line-height: 1.5;
+}
